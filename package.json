@@ -1,0 +1,44 @@
+{
+  "name": "anytv-node-boilerplate",
+  "version": "0.0.1",
+  "description": "REST API backend boilerplate",
+  "main": "server.js",
+  "dependencies": {
+    "anytv-node-cors": "latest",
+    "anytv-node-error-handler": "latest",
+    "anytv-node-importer": "latest",
+    "anytv-node-logger": "latest",
+    "anytv-node-mongo": "latest",
+    "anytv-node-mysql": "latest",
+    "body-parser": "latest",
+    "compression": "latest",
+    "cuddle": "latest",
+    "express": "latest",
+    "method-override": "latest",
+    "moment": "latest",
+    "morgan": "latest",
+    "multer": "latest"
+  },
+  "scripts": {
+    "start": "npm install && nodemon server.js",
+    "test": "make test",
+    "dev-test": "mocha tests -R spec -t 5000 -s 0 --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/anyTV/anytv-node-boilerplate"
+  },
+  "keywords": [
+    "freedom"
+  ],
+  "author": "any.TV",
+  "bugs": {
+    "url": "https://github.com/anyTV/anytv-node-boilerplate/issues"
+  },
+  "homepage": "https://github.com/anyTV/anytv-node-boilerplate",
+  "devDependencies": {
+    "chai": "latest",
+    "mocha": "latest",
+    "supertest": "latest"
+  }
+}
