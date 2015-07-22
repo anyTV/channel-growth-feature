@@ -18,6 +18,7 @@ var path = require('path'),
         APP_NAME: 'anyTV Node Boilerplate',
 
         PORT: 3000,
+        SSL_PORT: 3443,
 
         CORS :  {
             allowed_headers : 'Access-Token, X-Requested-With, Content-Type, Accept',
@@ -28,14 +29,6 @@ var path = require('path'),
         UPLOAD_DIR: path.normalize(__dirname + '/../uploads/'),
         VIEWS_DIR: path.normalize(__dirname + '/../views'),
         LOGS_DIR: path.normalize(__dirname + '/../logs/'),
-
-
-        DB: {
-            host: 'localhost',
-            user: 'root',
-            password: '',
-            database: 'master'
-        }
 
     };
 

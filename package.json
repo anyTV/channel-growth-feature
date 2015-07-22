@@ -14,10 +14,12 @@
     "compression": "latest",
     "cuddle": "latest",
     "express": "latest",
+    "memcached": "^2.1.0",
     "method-override": "latest",
     "moment": "latest",
     "morgan": "latest",
-    "multer": "latest"
+    "multer": "latest",
+    "object-assign": "^3.0.0"
   },
   "scripts": {
     "start": "npm install && nodemon server.js",

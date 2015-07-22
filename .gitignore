@@ -13,5 +13,9 @@ results
 npm-debug.log
 node_modules
 
+config/env/development.js
+lib/server.*
+*.bak
+
 trash
 sblm.sublime-workspace

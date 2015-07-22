@@ -7,10 +7,8 @@ module.exports = function (router) {
 
     router.del = router.delete;
 
-    //router.get('/user/:id', c.user.get_user);
-    router.get('/channels', c.channel.get_channels);
-    //router.get('/channels/:id', c.channel.get_channel);
-    router.get('/channels/:id/growth', c.growth.get_channel);
+    router.get ('/channels', c.channel.get_channels);
+    router.get ('/channels/growth', c.growth.get_grouped_channel);
 
     router.all('*', function (req, res) {
         res.status(404)

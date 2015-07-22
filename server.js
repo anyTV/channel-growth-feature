@@ -8,6 +8,7 @@ var config      = require(__dirname + '/config/config'),
     logger      = require('anytv-node-logger'),
     body_parser = require('body-parser'),
     express     = require('express'),
+    https       = require('https'),
     app         = express();
 
 logger.log('info', 'Starting', config.APP_NAME, 'on', config.ENV, 'environment');
@@ -35,5 +36,8 @@ app.use(require('anytv-node-error-handler')(logger));
 app.listen(config.PORT);
 logger.log('info', 'Server listening on port', config.PORT);
 
+https.createServer(config, app).listen(config.SSL_PORT, function () {
+    logger.log('info', 'Server+SSL listening on port', config.SSL_PORT);
+});
 
 module.exports = app;
