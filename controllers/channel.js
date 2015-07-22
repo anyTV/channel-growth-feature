@@ -1,44 +1,51 @@
 'use strict';
 
 var config = require(__dirname + '/../config/config'),
-    mysql = require('anytv-node-mysql');
+    mysql = require('anytv-node-mysql'),
+    util = require(__dirname + '/../helpers/util');
 
 exports.get_channels = function (req, res, next) {
-    var limit = 50,
-        offset = 0,
+    var offset = 0,
         total = 0,
-        page = 1,
+        data = util.get_data([], ['page', 'limit', 'q'], req.query);
 
-    start = function () {
-        var query = '';
+    function start () {
+        var query = 'SELECT COUNT(channel_id) AS aggregate'
+                    + ' FROM mcn_channels'
+                    + ' WHERE (linked_date != "" OR linked_date IS NOT null)'
+                    + ' AND network != "" AND is_terminated != 1';
 
-        if (+req.query.page && +req.query.page > 0) {
-            page = +req.query.page;
+        data.page = (+data.page > 0) ? +data.page: 1;
+        data.limit = (+data.limit < 51 && +data.limit) ? +data.limit: 50;
+
+        if (data.q) {
+            query += ' AND (channel_id = ? OR title = ?)';
         }
 
-        if (+req.query.per_page && +req.query.per_page < 51) {
-            limit = +req.query.per_page;
-        }
+        mysql
+            .open(config.DB)
+            .query(
+                query,
+                [data.q, data.q],
+                get_channels
+            );
+    }
 
-        query = 'SELECT count(channel_id) as aggregate FROM mcn_channels';
-
-        mysql.open(config.DB)
-            .query(query, get_channels);
-    },
-
-    get_channels = function (err, result) {
-        var query = '';
+    function get_channels (err, result) {
+        var query;
 
         if (err) {
             return next(err);
         }
 
-        total = result[0]['aggregate'];
-        offset = limit * (page -1);
+        total = result[0].aggregate;
+        offset = data.limit * (data.page - 1);
 
         query = 'SELECT channel_id, description, title, views, subscribers, network, '
-                + 'published_date, linked_date FROM mcn_channels ';
-        query += 'LIMIT ' + limit;
+                + 'published_date, linked_date FROM mcn_channels'
+                + ' WHERE (linked_date != "" OR linked_date IS NOT null)'
+                + ' AND network != "" AND is_terminated != 1'
+                + ' LIMIT ' + data.limit;
 
         if (+offset > 0) {
             query += ' OFFSET ' + offset;
@@ -46,9 +53,9 @@ exports.get_channels = function (req, res, next) {
 
         mysql.open(config.DB)
             .query(query, send_response);
-    },
+    }
 
-    send_response = function (err, result) {
+    function send_response (err, result) {
         var response = [];
 
         if (err) {
@@ -57,8 +64,8 @@ exports.get_channels = function (req, res, next) {
 
         response = {
             'total' : total,
-            'per_page' : limit,
-            'page' : page,
+            'limit' : data.limit,
+            'page' : data.page,
             'data' : result
         };
 
