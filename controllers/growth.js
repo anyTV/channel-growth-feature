@@ -11,7 +11,7 @@ var config = require(__dirname + '/../config/config'),
 exports.get_grouped_channel = function (req, res, next) {
     var date = moment(),
         start_month = date.subtract(3, 'month').format('YYYY-MM'),
-        end_month = date,
+        end_month = date.format('YYYY-MM'),
         data = util.get_data(
             [],
             ['month', 'network', 'duration'],
@@ -55,7 +55,7 @@ exports.get_grouped_channel = function (req, res, next) {
             return mysql.open(config.DB)
                 .query('SELECT SQL_CACHE channel_id, title, linked_date ' +
                        'FROM mcn_channels ' +
-                       'WHERE network IN (?) ' +
+                       'WHERE cms IN (?) ' +
                        'AND DATE_FORMAT(linked_date, "%Y-%m") = ?',
                        [data.network, start_month],
                        get_stat
@@ -72,7 +72,8 @@ exports.get_grouped_channel = function (req, res, next) {
         var channel_ids = [];
 
         if (err) {
-            return next(err);
+            logger.error(err);
+            return next('Error retrieving report');
         }
 
         if (!result.length) {
@@ -110,7 +111,8 @@ exports.get_grouped_channel = function (req, res, next) {
             response = { results: [], channels: channels };
 
         if (err) {
-            return next(err);
+            logger.error(err);
+            return next('Error retrieving report');
         }
 
         if (!result.length) {

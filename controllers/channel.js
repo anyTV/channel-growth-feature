@@ -13,7 +13,7 @@ exports.get_channels = function (req, res, next) {
         var query = 'SELECT COUNT(channel_id) AS aggregate'
                     + ' FROM mcn_channels'
                     + ' WHERE (linked_date != "" OR linked_date IS NOT null)'
-                    + ' AND network != "" AND is_terminated != 1';
+                    + ' AND cms != "" AND is_terminated != 1';
 
         data.page = (+data.page > 0) ? +data.page: 1;
         data.limit = (+data.limit < 51 && +data.limit) ? +data.limit: 50;
@@ -41,10 +41,10 @@ exports.get_channels = function (req, res, next) {
         total = result[0].aggregate;
         offset = data.limit * (data.page - 1);
 
-        query = 'SELECT channel_id, description, title, views, subscribers, network, '
+        query = 'SELECT channel_id, description, title, views, subscribers, cms, '
                 + 'published_date, linked_date FROM mcn_channels'
                 + ' WHERE (linked_date != "" OR linked_date IS NOT null)'
-                + ' AND network != "" AND is_terminated != 1'
+                + ' AND cms != "" AND is_terminated != 1'
                 + ' LIMIT ' + data.limit;
 
         if (+offset > 0) {
